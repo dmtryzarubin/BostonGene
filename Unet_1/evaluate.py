@@ -7,7 +7,7 @@ from PIL import Image
 import data_utils
 from tqdm import tqdm
 import shutil
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, dataset
 
 
 
@@ -29,9 +29,41 @@ def reverse_transform(img):
 
 
 def calc_mean_dist(data_set):
-    pass
+    objects = {
+        'filled square' : [],
+        'filled circle' : [],
+        'traingle' : [],
+        'circle' : [],
+        'mesh square' : [],
+        'plus' : []
+    }
 
-
+    for idx, _ in enumerate(data_set):
+        masks = dataset[idx][1]
+        obj_ids = np.unique(masks)
+        obj_ids = obj_ids[1:]
+        num_objs = len(obj_ids)
+        boxes = []
+        for i in range(num_objs):
+            object = list(objects.keys())[i]
+            pos = np.where(masks[i])
+            xmin = np.min(pos[1])
+            xmax = np.max(pos[1])
+            ymin = np.min(pos[0])
+            ymax = np.max(pos[0])
+            if object == 'traingle':
+                objects[object].append((np.mean([xmin, xmax]) - (xmin, xmax) / 2, np.mean([ymin, ymax]) - (xmin, xmax) / 2))
+            else:
+                objects[object].append((np.mean([xmin, xmax]), np.mean([ymin, ymax])))
+            
+    
+    mean_loc = {}
+    for object in objects:
+        mean_loc[object] = np.mean(objects[object])
+    
+    return mean_loc, 
+    
+        
 
 def evaluate(model, loss_fn, test_dataset, batch_size, path, device='cuda'):
     """
