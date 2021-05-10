@@ -68,6 +68,11 @@ def create_dataset(height, width, n_train, n_val, n_test, root):
 
 
 def plot_img_n_masks(root, num_imgs):
+    """
+    Plots saved images and masks
+    :param root: Data root folder
+    :param num_imgs: Number of images to plot
+    """
     img_path = os.path.join(root,'Images')
     masks_path = os.path.join(root,'Masks')
     idxs = np.random.randint(low=1, high=len(os.listdir(img_path)), size=num_imgs)
@@ -95,6 +100,10 @@ def plot_img_n_masks(root, num_imgs):
 
 
 class Segmentation_Dataset(torch.utils.data.Dataset):
+    """
+    Reinitialized Segmentation dataset class
+    """
+
     def __init__(self, root, transforms=None):
         self.root = root
         self.transforms = transforms
@@ -124,6 +133,7 @@ class Segmentation_Dataset(torch.utils.data.Dataset):
         masks = mask == obj_ids[:, None, None]
         masks = masks.astype('float32')
 
+        # If some objects were hided by other ones => we just creating an empty mask for that object = There is no such kind of object on the image
         if len(obj_ids) != len(reference):
             missing_ch = list(set(reference) - set(obj_ids))
             for i in sorted(missing_ch):
