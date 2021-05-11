@@ -42,7 +42,7 @@ def calc_mean_distance(distances):
     return mean_dist
 
 
-def locations_n_dists(data_set):
+def calc_location(data_set):
     """
     Calculates center coordinates of each object in data_set
     """

@@ -11,21 +11,7 @@ import matplotlib.pyplot as plt
 from data_utils import generate_random_data, masks_to_colorimg
 
 
-
-def create_dataset(height, width, n_train, n_val, n_test, root):
-    """
-    Creates a two-folder dataset with images and masks
-    :params height, width: image height and width
-    :param n_imgs: number of Images in the dataset
-    :param ROOT: Root folder
-    """
-    folder = 'Segmentation_Data'
-    path = os.path.join(root, folder)
-    sets = ['Train', 'Val', 'Test']
-    subfolders = ['Images', 'Masks']
-    n = [n_train, n_val, n_test] 
-
-    def generate_n_save(path, n_imgs):
+def generate_n_save(path, n_imgs):
         """
         Generating n images (n_imgs) and parsing them into folders.
         """
@@ -43,6 +29,20 @@ def create_dataset(height, width, n_train, n_val, n_test, root):
             im.save(os.path.join(path, 'Images') + '\\img_' + str(n) + '.png')
             ms = Image.fromarray(mask).convert("P")
             ms.save(os.path.join(path, 'Masks') + '\\mask_' + str(n) + '.png')
+
+
+def create_dataset(height, width, n_train, n_val, n_test, root):
+    """
+    Creates a two-folder dataset with images and masks
+    :params height, width: image height and width
+    :param n_imgs: number of Images in the dataset
+    :param ROOT: Root folder
+    """
+    folder = 'Segmentation_Data'
+    path = os.path.join(root, folder)
+    sets = ['Train', 'Val', 'Test']
+    subfolders = ['Images', 'Masks']
+    n = [n_train, n_val, n_test] 
     
     # Checking if dir already exists
     if os.path.exists(path):
@@ -63,8 +63,6 @@ def create_dataset(height, width, n_train, n_val, n_test, root):
             
     except OSError:
         print (f'Creation of the directory |{path}| failed')
-
-
 
 
 def plot_img_n_masks(root, num_imgs):
