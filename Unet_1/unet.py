@@ -129,9 +129,3 @@ class UNet(nn.Module):
         out = self.out(l_17)
         # [6, 128, 128]
         return out
-
-
-if __name__ == '__main__':
-    image = torch.rand((16, 3, 160, 160))
-    model = UNet()
-    print(model(image))

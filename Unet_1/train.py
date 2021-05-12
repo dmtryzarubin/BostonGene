@@ -89,11 +89,12 @@ def train_model(model, optimizer, scheduler, train_loader, val_loader, num_epoch
 
         model.eval()
         for inputs, labels in val_loader:
-            inputs = inputs.to(device)
-            labels = labels.to(device)
+            with torch.no_grad():
+                inputs = inputs.to(device)
+                labels = labels.to(device)
 
-            outputs = model(inputs)
-            loss = calc_loss(outputs, labels, metrics)
+                outputs = model(inputs)
+                loss = calc_loss(outputs, labels, metrics)
 
             epoch_samples += inputs.size(0)
 

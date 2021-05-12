@@ -3,16 +3,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def plot_locations(locations,):
+def plot_locations(locations, kde, levels, s=20, fill=False, alpha=1, xlim=[0, 160], ylim=[160]):
     """
     Displays "Location intensity" on the image grid of each item
     """
     palette = sns.color_palette('muted')
-    for idx, item in enumerate(locations):
+    for _, item in enumerate(locations):
         coordinates = np.asarray(locations[item])
-        plot = sns.jointplot(coordinates[:,0], coordinates[:,1], ylim=160, xlim=[0, 160], color=palette[0])
-        plot.plot_joint(sns.kdeplot, color=palette[1], zorder=0, levels=10, linewidth=10)
-        plot.fig.suptitle(f'Distribution of {item} positions')
+        plot = sns.jointplot(coordinates[:,0], coordinates[:,1], joint_kws={'s': s}, kind='scatter', alpha=alpha, ylim=160, xlim=[0, 160], color=palette[0])
+        if kde == True:
+            plot.plot_joint(sns.kdeplot, color=palette[1], zorder=0, levels=levels, fill=fill, linewidth=10)
+        plot.fig.suptitle(f'Distribution of {item} positions', fontsize='x-large')
         plot.fig.subplots_adjust(top=0.95)
 
 
